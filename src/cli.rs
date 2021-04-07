@@ -5,7 +5,6 @@ use std::path::PathBuf;
 use std::process::Command;
 
 pub fn get_matches_and_run_command() -> Result<()> {
-    let special_url_possible_values = SpecialUrl::get_str_array_of_possible_values().into_iter();
     let matches = App::new("Browser Utility")
         .version("1.0")
         .author("Felipe A. <farceriv@gmail.com>")
@@ -18,7 +17,10 @@ pub fn get_matches_and_run_command() -> Result<()> {
                 .multiple(false)
                 .max_values(1)
                 .min_values(1)
-                .possible_values(special_url_possible_values)
+                .possible_values(&[
+                    SpecialUrl::Github.to_url_string().as_str(),
+                    SpecialUrl::Gmail.to_url_string().as_str(),
+                ])
                 .conflicts_with("url"),
         )
         .arg(
@@ -46,13 +48,6 @@ enum SpecialUrl {
 }
 
 impl SpecialUrl {
-    fn get_str_array_of_possible_values() -> Vec<String> {
-        vec![Self::Github, Self::Gmail]
-            .into_iter()
-            .map(|x| x.to_url_string())
-            .collect()
-    }
-
     fn to_url_string(self) -> String {
         match self {
             Self::Github => "https://github.com/astherath",
