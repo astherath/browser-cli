@@ -67,9 +67,9 @@ impl SpecialUrl {
 
     fn to_url_string(self) -> String {
         match self {
-            Self::Github => "https://github.com/astherath",
+            Self::Github => "https://github.com/",
             Self::Gmail => "https://gmail.com",
-            Self::Logs => "https://dashboard.heroku.com/apps/sparkdev-underline/logs",
+            Self::Logs => "https://dashboard.heroku.com/",
             Self::Default => "https://google.com",
         }
         .to_string()
