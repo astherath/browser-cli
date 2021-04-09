@@ -27,7 +27,7 @@ pub fn get_matches_and_run_command() -> Result<()> {
                 .multiple(false)
                 .max_values(1)
                 .min_values(1)
-                .possible_values(&["gmail", "mail", "github", "logs", "log"])
+                .possible_values(&["gmail", "mail", "github", "logs", "log", "dev"])
                 .conflicts_with("url"),
         )
         .get_matches();
@@ -52,6 +52,7 @@ enum SpecialUrl {
     Github,
     Logs,
     Gmail,
+    DevServer,
     Default,
 }
 
@@ -61,6 +62,7 @@ impl SpecialUrl {
             "github" => Self::Github,
             "mail" | "gmail" => Self::Gmail,
             "logs" | "log" => Self::Logs,
+            "dev" => Self::DevServer,
             _ => Self::Default,
         }
     }
@@ -70,6 +72,7 @@ impl SpecialUrl {
             Self::Github => "https://github.com/astherath",
             Self::Gmail => "https://gmail.com",
             Self::Logs => "https://dashboard.heroku.com/apps/sparkdev-underline/logs",
+            Self::DevServer => "localhost:8000/docs",
             Self::Default => "https://google.com",
         }
         .to_string()
