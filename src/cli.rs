@@ -3,6 +3,7 @@ use std::ffi::OsStr;
 use std::io::Result;
 use std::path::PathBuf;
 use std::process::Command;
+use sublime_fuzzy::best_match;
 
 pub fn get_matches_and_run_command() -> Result<()> {
     let matches = App::new("Browser Utility")
@@ -15,32 +16,19 @@ pub fn get_matches_and_run_command() -> Result<()> {
                 .multiple(false)
                 .value_name("url")
                 .help("URL value to open the browser instance with")
-                .takes_value(true)
-                .conflicts_with("special_url"),
-        )
-        .arg(
-            Arg::with_name("special_url")
-                .short("s")
-                .value_name("url shortcut")
-                .help("Provides shorthand for a couple of popular/common URLs")
-                .takes_value(true)
-                .multiple(false)
-                .max_values(1)
-                .min_values(1)
-                .possible_values(&["gmail", "mail", "github", "logs", "log", "dev"])
-                .conflicts_with("url"),
+                .takes_value(true),
         )
         .get_matches();
 
-    let url = match matches.value_of("special_url") {
-        Some(special_url_enum_string) => {
-            let special_url = SpecialUrl::from_str(special_url_enum_string);
-            UrlInputType::Special(special_url)
+    let url = {
+        if let Some(url_str) = matches.value_of("url") {
+            match SpecialUrl::check_if_url_is_special(url_str) {
+                true => UrlInputType::Special(SpecialUrl::from_str(url_str)),
+                false => UrlInputType::Regular(url_str.to_string()),
+            }
+        } else {
+            UrlInputType::Blank
         }
-        None => match matches.value_of("url") {
-            Some(url) => UrlInputType::Regular(url.to_string()),
-            None => UrlInputType::Blank,
-        },
     };
 
     open_browser_to_url(url)?;
@@ -57,6 +45,10 @@ enum SpecialUrl {
 }
 
 impl SpecialUrl {
+    fn check_if_url_is_special(str_val: &str) -> bool {
+        !str_val.to_string().contains(".")
+    }
+
     fn from_str(str_val: &str) -> Self {
         match str_val {
             "github" => Self::Github,
