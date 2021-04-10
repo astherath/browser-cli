@@ -1,3 +1,4 @@
+use std::env::{consts, var};
 use std::ffi::OsStr;
 use std::io::Result;
 use std::path::PathBuf;
@@ -36,7 +37,13 @@ where
     I: IntoIterator<Item = S>,
     S: AsRef<OsStr>,
 {
-    Command::new("open")
+    let open_command = match consts::OS {
+        "linux" => "xdg-open",
+        "macos" => "open",
+        "_" | &_ => "open",
+    };
+
+    Command::new(open_command)
         .args(args)
         .spawn()
         .expect("Failed to execute");
@@ -45,7 +52,7 @@ where
 
 fn get_path_of_browser_executable() -> PathBuf {
     let browser_path_key = "BROWSER_BIN_PATH";
-    let browser_path_str_from_env = std::env::var(browser_path_key).expect(
+    let browser_path_str_from_env = var(browser_path_key).expect(
         r#"Environment variable "BROWSER_BIN_PATH" not set.
             Should point to the executable browser binary"#,
     );
