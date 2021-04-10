@@ -1,5 +1,5 @@
 [package]
-name = "browser"
+name = "browser-cli-pma"
 version = "0.1.0"
 authors = ["astherath <farceriv@gmail.com>"]
 edition = "2018"
