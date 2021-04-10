@@ -1,9 +1,9 @@
 use clap::{App, Arg};
+use fuzzy_matcher::{skim::SkimMatcherV2, FuzzyMatcher};
 use std::ffi::OsStr;
 use std::io::Result;
 use std::path::PathBuf;
 use std::process::Command;
-use sublime_fuzzy::best_match;
 
 pub fn get_matches_and_run_command() -> Result<()> {
     let matches = App::new("Browser Utility")
@@ -20,17 +20,8 @@ pub fn get_matches_and_run_command() -> Result<()> {
         )
         .get_matches();
 
-    let url = {
-        if let Some(url_str) = matches.value_of("url") {
-            match SpecialUrl::check_if_url_is_special(url_str) {
-                true => UrlInputType::Special(SpecialUrl::from_str(url_str)),
-                false => UrlInputType::Regular(url_str.to_string()),
-            }
-        } else {
-            UrlInputType::Blank
-        }
-    };
-
+    let raw_url_match = matches.value_of("url");
+    let url = get_url_from_raw_match(raw_url_match);
     open_browser_to_url(url)?;
 
     Ok(())
@@ -45,8 +36,23 @@ enum SpecialUrl {
 }
 
 impl SpecialUrl {
-    fn check_if_url_is_special(str_val: &str) -> bool {
-        !str_val.to_string().contains(".")
+    fn get_all_possible_value_strs() -> Vec<String> {
+        vec!["github", "mail", "gmail", "logs", "log", "dev"]
+            .iter()
+            .map(|x| x.to_string())
+            .collect()
+    }
+
+    fn try_to_match_from_str(url_str: &str) -> Option<Self> {
+        let matcher = SkimMatcherV2::default();
+        let possible_enum_strings = Self::get_all_possible_value_strs();
+
+        for string_to_compare in &possible_enum_strings {
+            if matcher.fuzzy_match(string_to_compare, url_str).is_some() {
+                return Some(Self::from_str(string_to_compare));
+            }
+        }
+        None
     }
 
     fn from_str(str_val: &str) -> Self {
@@ -75,6 +81,17 @@ enum UrlInputType {
     Regular(String),
     Blank,
     Special(SpecialUrl),
+}
+
+fn get_url_from_raw_match(raw_cli_match: Option<&str>) -> UrlInputType {
+    if let Some(url_str) = raw_cli_match {
+        match SpecialUrl::try_to_match_from_str(url_str) {
+            Some(special_url) => UrlInputType::Special(special_url),
+            None => UrlInputType::Regular(url_str.to_string()),
+        }
+    } else {
+        UrlInputType::Blank
+    }
 }
 
 fn open_browser_to_url(url: UrlInputType) -> Result<()> {
