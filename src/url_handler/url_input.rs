@@ -29,17 +29,21 @@ fn add_http_prefix_to_url(url_str: &str) -> String {
 mod test_url_input_type_unit {
     use super::*;
 
-    mod test_format_url_string {
-        use super::*;
+    #[test]
+    fn test_format_url_with_prefix_ok() {
+        let url_with_prefix = "https://google";
+        let formatted_url = validate_and_fix_url_string(url_with_prefix);
 
-        #[test]
-        fn test_format_url_str_no_http_prefix_ok() {
-            let url_without_http_head = "google";
-            let formatted_url = validate_and_fix_url_string(url_without_http_head);
+        assert_eq!(url_with_prefix, formatted_url)
+    }
 
-            let edited_url = ["http://", url_without_http_head].join("");
+    #[test]
+    fn test_format_url_str_no_http_prefix_ok() {
+        let url_without_prefix = "google";
+        let formatted_url = validate_and_fix_url_string(url_without_prefix);
 
-            assert_eq!(formatted_url, edited_url)
-        }
+        let edited_url = ["http://", url_without_prefix].join("");
+
+        assert_eq!(formatted_url, edited_url)
     }
 }
