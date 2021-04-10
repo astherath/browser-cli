@@ -39,3 +39,56 @@ fn get_path_of_browser_executable() -> PathBuf {
     );
     PathBuf::from(browser_path_str_from_env)
 }
+
+#[cfg(test)]
+mod test_browser_command {
+    use super::*;
+    mod test_browser_path {
+        use super::*;
+
+        fn get_browser_path_key<'a>() -> &'a str {
+            "BROWSER_BIN_PATH"
+        }
+
+        fn set_browser_bin_path_env_value(value: &str) {
+            let env_var_key = get_browser_path_key();
+            std::env::set_var(env_var_key, value);
+        }
+
+        fn get_browser_bin_path_env_value() -> String {
+            let env_var_key = get_browser_path_key();
+            std::env::var(env_var_key).expect("Can't read env var")
+        }
+
+        #[test]
+        fn test_path_from_env_ok() {
+            let old_env_var = get_browser_bin_path_env_value();
+
+            // what are the odds of someone running this and NOT having rustup?
+            let temp_var = "~/.rustup/settings.toml";
+            set_browser_bin_path_env_value(temp_var);
+
+            let bin_path = get_path_of_browser_executable();
+            let file_exists = !bin_path.exists();
+
+            assert!(file_exists);
+
+            set_browser_bin_path_env_value(&old_env_var);
+        }
+
+        #[test]
+        fn test_bad_env_path_() {
+            let old_env_var = get_browser_bin_path_env_value();
+
+            let invalid_var_value = "NONEXISTENT_PATH";
+            set_browser_bin_path_env_value(invalid_var_value);
+
+            let nonexistent_path = get_path_of_browser_executable();
+            let file_doesnt_exist = !nonexistent_path.exists();
+
+            assert!(file_doesnt_exist);
+
+            set_browser_bin_path_env_value(&old_env_var);
+        }
+    }
+}
