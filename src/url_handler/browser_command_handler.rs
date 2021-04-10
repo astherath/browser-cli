@@ -4,19 +4,31 @@ use std::path::PathBuf;
 use std::process::Command;
 
 pub fn open_browser_to_url_string(url_str: &str) -> Result<()> {
-    let browser_exec_path_str = get_path_of_browser_executable();
-    let args = &["-a", browser_exec_path_str.to_str().unwrap(), &url_str];
+    let args = get_args_list_for_opening_page_to_url(url_str);
     run_open_browser_command_with_args(args)?;
 
     Ok(())
 }
 
 pub fn open_browser_to_blank_page() -> Result<()> {
-    let browser_exec_path = get_path_of_browser_executable();
-    let args = &[browser_exec_path];
+    let args = get_args_list_for_blank_page();
     run_open_browser_command_with_args(args)?;
 
     Ok(())
+}
+
+fn get_args_list_for_opening_page_to_url(url_str: &str) -> Vec<String> {
+    let browser_exec_path_str = get_path_of_browser_executable()
+        .into_os_string()
+        .into_string()
+        .unwrap();
+
+    vec!["-a".to_string(), browser_exec_path_str, url_str.to_string()]
+}
+
+fn get_args_list_for_blank_page() -> Vec<PathBuf> {
+    let browser_exec_path = get_path_of_browser_executable();
+    vec![browser_exec_path]
 }
 
 fn run_open_browser_command_with_args<I, S>(args: I) -> Result<()>
@@ -43,6 +55,35 @@ fn get_path_of_browser_executable() -> PathBuf {
 #[cfg(test)]
 mod test_browser_command {
     use super::*;
+    mod test_arg_lists_for_opening_pages {
+        use super::*;
+
+        #[test]
+        fn test_args_list_from_url_ok() {
+            let url = "https://google.com";
+            let browser_bin_path_string = get_path_of_browser_executable()
+                .into_os_string()
+                .into_string()
+                .unwrap();
+
+            let args_list = get_args_list_for_opening_page_to_url(url);
+
+            let args_vec_to_compare =
+                vec!["-a".to_string(), browser_bin_path_string, url.to_string()];
+
+            assert_eq!(args_vec_to_compare, args_list);
+        }
+
+        #[test]
+        fn test_blank_page_arg_list_ok() {
+            let arg_list = get_args_list_for_blank_page();
+            let browser_bin_path_in_vec = vec![get_path_of_browser_executable()];
+            assert_eq!(browser_bin_path_in_vec, arg_list);
+        }
+    }
+
+    // fn get_args_list_for_opening_page_to_url(url_str: &str) -> Vec<String> {
+    // fn get_args_list_for_blank_page() -> Vec<PathBuf> {
     mod test_browser_path {
         use super::*;
 
