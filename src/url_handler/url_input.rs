@@ -24,3 +24,22 @@ pub fn validate_and_fix_url_string(url_str: &str) -> String {
 fn add_http_prefix_to_url(url_str: &str) -> String {
     ["http://", url_str].join("")
 }
+
+#[cfg(test)]
+mod test_url_input_type_unit {
+    use super::*;
+
+    mod test_format_url_string {
+        use super::*;
+
+        #[test]
+        fn test_format_url_str_no_http_prefix_ok() {
+            let url_without_http_head = "google";
+            let formatted_url = validate_and_fix_url_string(url_without_http_head);
+
+            let edited_url = ["http://", url_without_http_head].join("");
+
+            assert_eq!(formatted_url, edited_url)
+        }
+    }
+}
