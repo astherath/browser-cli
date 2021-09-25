@@ -1,5 +1,5 @@
 [package]
-name = "browser-cli-pma"
+name = "bropen"
 version = "0.1.0"
 authors = ["astherath <farceriv@gmail.com>"]
 edition = "2018"
