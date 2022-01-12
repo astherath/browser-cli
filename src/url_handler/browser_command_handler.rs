@@ -4,15 +4,39 @@ use std::io::Result;
 use std::path::PathBuf;
 use std::process::Command;
 
-pub fn open_browser_to_url_string(url_str: &str) -> Result<()> {
-    let args = get_args_list_for_opening_page_to_url(url_str);
+type UrlString<'a> = Option<&'a str>;
+type BinName<'a> = Option<&'a str>;
+
+pub struct ArgUtil<'a> {
+    url: UrlString<'a>,
+    bin: BinName<'a>,
+}
+
+impl<'a> ArgUtil<'a> {
+    pub fn new(url: UrlString<'a>, bin: BinName<'a>) -> Self {
+        Self { url, bin }
+    }
+
+    pub fn open_blank_page(bin_to_use: Option<&'a str>) -> Result<()> {
+        Ok(())
+    }
+}
+
+pub fn open_browser_to_url_string(url_str: &str, bin_to_use: Option<&str>) -> Result<()> {
+    let args = match bin_to_use {
+        Some(bin_name_str) => unimplemented!(),
+        None => get_args_list_for_opening_page_to_url(url_str),
+    };
     run_open_browser_command_with_args(args)?;
 
     Ok(())
 }
 
-pub fn open_browser_to_blank_page() -> Result<()> {
-    let args = get_args_list_for_blank_page();
+pub fn open_browser_to_blank_page(bin_to_use: Option<&str>) -> Result<()> {
+    let args = match bin_to_use {
+        Some(bin_name_str) => unimplemented!(),
+        None => get_args_list_for_blank_page(),
+    };
     run_open_browser_command_with_args(args)?;
 
     Ok(())

@@ -18,17 +18,19 @@ pub fn get_url_from_raw_match(raw_cli_match: Option<&str>) -> UrlInputType {
     }
 }
 
-pub fn open_browser_to_url(url: UrlInputType) -> Result<()> {
-    match url {
+pub fn open_browser_to_url(url: UrlInputType, bin_to_use: Option<&str>) -> Result<()> {
+    let url_string = match url {
         UrlInputType::Regular(raw_url_string) => {
-            let url_string = url_input::validate_and_fix_url_string(&raw_url_string);
-            browser_command_handler::open_browser_to_url_string(&url_string)?
+            url_input::validate_and_fix_url_string(&raw_url_string)
         }
         UrlInputType::Special(special_url) => {
-            let url_string = url_input::validate_and_fix_url_string(&special_url.to_url_string());
-            browser_command_handler::open_browser_to_url_string(&url_string)?
+            url_input::validate_and_fix_url_string(&special_url.to_url_string())
         }
-        UrlInputType::Blank => browser_command_handler::open_browser_to_blank_page()?,
-    }
+        UrlInputType::Blank => {
+            browser_command_handler::open_browser_to_blank_page(bin_to_use)?;
+            return Ok(());
+        }
+    };
+    browser_command_handler::open_browser_to_url_string(&url_string, bin_to_use)?;
     Ok(())
 }
