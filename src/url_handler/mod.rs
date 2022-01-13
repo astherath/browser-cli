@@ -4,6 +4,7 @@ mod url_macro_handler;
 
 use std::io::Result;
 
+use browser_command_handler::ArgUtil;
 use url_input::UrlInputType;
 use url_macro_handler::SpecialUrl;
 
@@ -27,10 +28,10 @@ pub fn open_browser_to_url(url: UrlInputType, bin_to_use: Option<&str>) -> Resul
             url_input::validate_and_fix_url_string(&special_url.to_url_string())
         }
         UrlInputType::Blank => {
-            browser_command_handler::open_browser_to_blank_page(bin_to_use)?;
+            ArgUtil::open_blank_page(bin_to_use)?;
             return Ok(());
         }
     };
-    browser_command_handler::open_browser_to_url_string(&url_string, bin_to_use)?;
+    ArgUtil::new(&url_string, bin_to_use).open_browser_to_url()?;
     Ok(())
 }

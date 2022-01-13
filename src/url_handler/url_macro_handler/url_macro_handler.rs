@@ -6,6 +6,7 @@ pub enum SpecialUrl {
     Gmail,
     DevServer,
     Ng,
+    Yt,
     Default,
 }
 
@@ -17,6 +18,7 @@ impl SpecialUrl {
             Self::Logs => "https://dashboard.heroku.com/apps/sparkdev-underline/logs",
             Self::DevServer => "localhost:8000/docs",
             Self::Ng => "localhost:4200",
+            Self::Yt => "https://youtube.com",
             Self::Default => "https://google.com",
         }
         .to_string()
@@ -41,12 +43,13 @@ impl SpecialUrl {
             "logs" | "log" => Self::Logs,
             "dev" => Self::DevServer,
             "ng" => Self::Ng,
+            "yt" => Self::Yt,
             _ => Self::Default,
         }
     }
 
     fn get_all_possible_value_strs() -> Vec<String> {
-        vec!["github", "mail", "gmail", "logs", "log", "dev", "ng"]
+        vec!["github", "mail", "gmail", "logs", "log", "dev", "ng", "yt"]
             .iter()
             .map(|x| x.to_string())
             .collect()
