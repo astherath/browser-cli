@@ -49,10 +49,15 @@ impl SpecialUrl {
         }
     }
 
-    fn get_all_possible_value_strs() -> Vec<String> {
-        vec!["github", "mail", "gmail", "logs", "log", "dev", "ng", "yt", "new"]
+    pub fn get_all_possible_value_strs() -> Vec<String> {
+        Self::get_all_possible_value_strs_array()
             .iter()
             .map(|x| x.to_string())
             .collect()
+    }
+    pub fn get_all_possible_value_strs_array() -> [&'static str; 9] {
+        [
+            "github", "mail", "gmail", "logs", "log", "dev", "ng", "yt", "new",
+        ]
     }
 }

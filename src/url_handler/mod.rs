@@ -1,6 +1,6 @@
 mod browser_command_handler;
 mod url_input;
-mod url_macro_handler;
+pub mod url_macro_handler;
 
 use std::io::Result;
 
