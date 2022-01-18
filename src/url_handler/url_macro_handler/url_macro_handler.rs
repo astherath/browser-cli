@@ -44,12 +44,13 @@ impl SpecialUrl {
             "dev" => Self::DevServer,
             "ng" => Self::Ng,
             "yt" => Self::Yt,
+            "new" => Self::Default,
             _ => Self::Default,
         }
     }
 
     fn get_all_possible_value_strs() -> Vec<String> {
-        vec!["github", "mail", "gmail", "logs", "log", "dev", "ng", "yt"]
+        vec!["github", "mail", "gmail", "logs", "log", "dev", "ng", "yt", "new"]
             .iter()
             .map(|x| x.to_string())
             .collect()
