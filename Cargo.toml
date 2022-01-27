@@ -1,8 +1,8 @@
 [package]
 name = "bropen"
-version = "0.1.0"
-authors = ["astherath <farceriv@gmail.com>"]
-edition = "2018"
+version = "1.0.0"
+authors = ["astherath <me@felipearce.dev>"]
+edition = "2021"
 description = "A small browser CLI"
 license = "MIT OR Apache-2.0"
 

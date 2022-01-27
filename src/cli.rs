@@ -6,14 +6,17 @@ use url_handler::url_macro_handler::SpecialUrl;
 pub fn get_matches_and_run_command() -> Result<()> {
     let matches = App::new("Browser Utility")
         .version("1.0")
-        .author("Felipe A. <farceriv@gmail.com>")
+        .author("astherath <me@felipearce.dev>")
         .about("Opens up a browser tab to the given URL + some more niceties")
         .arg(
             Arg::with_name("url")
                 .multiple(false)
                 .default_value("new")
                 .value_name("url")
-                .help("URL value to open the browser instance with")
+                .help("URL string, search term(s) or shortcut to open the browser instance to")
+                .long_help(
+                    "Can accept a URL string, a quoted sentence to google, or one of the shortcuts",
+                )
                 .takes_value(true),
         )
         .arg(

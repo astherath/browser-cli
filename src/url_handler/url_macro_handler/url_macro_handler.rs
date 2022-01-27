@@ -17,7 +17,7 @@ impl SpecialUrl {
             Self::DevServer => "http://localhost:8000/docs",
             Self::Ng => "http://localhost:4200",
             Self::Yt => "https://youtube.com",
-            Self::Default => "https://google.com",
+            Self::Default => "about:blank",
         }
         .to_string()
     }
