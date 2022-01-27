@@ -2,7 +2,6 @@ use fuzzy_matcher::{skim::SkimMatcherV2, FuzzyMatcher};
 
 pub enum SpecialUrl {
     Github,
-    Logs,
     Gmail,
     DevServer,
     Ng,
@@ -15,7 +14,6 @@ impl SpecialUrl {
         match self {
             Self::Github => "https://github.com/astherath",
             Self::Gmail => "https://gmail.com",
-            Self::Logs => "https://dashboard.heroku.com/apps/sparkdev-underline/logs",
             Self::DevServer => "localhost:8000/docs",
             Self::Ng => "localhost:4200",
             Self::Yt => "https://youtube.com",
@@ -39,8 +37,7 @@ impl SpecialUrl {
     fn from_str(str_val: &str) -> Self {
         match str_val {
             "github" => Self::Github,
-            "mail" | "gmail" => Self::Gmail,
-            "logs" | "log" => Self::Logs,
+            "mail" => Self::Gmail,
             "dev" => Self::DevServer,
             "ng" => Self::Ng,
             "yt" => Self::Yt,
@@ -55,9 +52,15 @@ impl SpecialUrl {
             .map(|x| x.to_string())
             .collect()
     }
-    pub fn get_all_possible_value_strs_array() -> [&'static str; 9] {
-        [
-            "github", "mail", "gmail", "logs", "log", "dev", "ng", "yt", "new",
-        ]
+    pub fn get_all_possible_value_strs_array() -> [&'static str; 6] {
+        ["github", "mail", "dev", "ng", "yt", "new"]
+    }
+
+    pub fn get_shorthand_url_pairs() -> Vec<(String, String)> {
+        Self::get_all_possible_value_strs()
+            .iter()
+            .map(|x| (x, Self::from_str(x).to_url_string()))
+            .map(|x| (x.0.to_string(), x.1))
+            .collect()
     }
 }

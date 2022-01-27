@@ -1,10 +1,9 @@
 use crate::url_handler;
-use clap::{App, Arg};
+use clap::{App, Arg, SubCommand};
 use std::io::Result;
 use url_handler::url_macro_handler::SpecialUrl;
 
 pub fn get_matches_and_run_command() -> Result<()> {
-    let shorthand_opts = SpecialUrl::get_all_possible_value_strs_array();
     let matches = App::new("Browser Utility")
         .version("1.0")
         .author("Felipe A. <farceriv@gmail.com>")
@@ -14,7 +13,6 @@ pub fn get_matches_and_run_command() -> Result<()> {
                 .multiple(false)
                 .default_value("new")
                 .value_name("url")
-                .possible_values(&shorthand_opts)
                 .help("URL value to open the browser instance with")
                 .takes_value(true),
         )
@@ -27,12 +25,24 @@ pub fn get_matches_and_run_command() -> Result<()> {
                 .possible_values(&["qute", "ffox", "brave"])
                 .takes_value(true),
         )
+        .subcommand(
+            SubCommand::with_name("view")
+                .about("Lists the possible shorthand URL bookmarks and where they take you"),
+        )
         .get_matches();
 
-    let raw_url_match = matches.value_of("url");
-    let bin_to_use = matches.value_of("bin-name");
-    let url = url_handler::get_url_from_raw_match(raw_url_match);
-    url_handler::open_browser_to_url(url, bin_to_use)?;
+    if let Some(_) = matches.subcommand_matches("view") {
+        let opts = SpecialUrl::get_shorthand_url_pairs();
+        println!("Shorthand | url");
+        println!("{}", "-".repeat(50));
+        opts.iter()
+            .for_each(|x| println!("{:<8} | {:<30}", x.0, x.1));
+    } else {
+        let raw_url_match = matches.value_of("url");
+        let bin_to_use = matches.value_of("bin-name");
+        let url = url_handler::get_url_from_raw_match(raw_url_match);
+        url_handler::open_browser_to_url(url, bin_to_use)?;
+    }
 
     Ok(())
 }
