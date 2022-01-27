@@ -7,6 +7,11 @@ pub enum UrlInputType {
 }
 
 pub fn validate_and_fix_url_string(url_str: &str) -> String {
+    // check if searchable string
+    if url_str.contains(" ") || !url_str.contains(".") {
+        return turn_to_search_url(url_str);
+    }
+
     let min_http_prefix_size = 7;
     let url_too_small_to_have_http_prefix = url_str.len() <= min_http_prefix_size;
 
@@ -28,27 +33,4 @@ pub fn turn_to_search_url(search_term: &str) -> String {
 
 fn add_http_prefix_to_url(url_str: &str) -> String {
     ["http://", url_str].join("")
-}
-
-#[cfg(test)]
-mod test_url_input_type_unit {
-    use super::*;
-
-    #[test]
-    fn test_format_url_with_prefix_ok() {
-        let url_with_prefix = "https://google";
-        let formatted_url = validate_and_fix_url_string(url_with_prefix);
-
-        assert_eq!(url_with_prefix, formatted_url)
-    }
-
-    #[test]
-    fn test_format_url_str_no_http_prefix_ok() {
-        let url_without_prefix = "google";
-        let formatted_url = validate_and_fix_url_string(url_without_prefix);
-
-        let edited_url = ["http://", url_without_prefix].join("");
-
-        assert_eq!(formatted_url, edited_url)
-    }
 }

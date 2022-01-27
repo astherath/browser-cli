@@ -14,8 +14,8 @@ impl SpecialUrl {
         match self {
             Self::Github => "https://github.com/astherath",
             Self::Gmail => "https://gmail.com",
-            Self::DevServer => "localhost:8000/docs",
-            Self::Ng => "localhost:4200",
+            Self::DevServer => "http://localhost:8000/docs",
+            Self::Ng => "http://localhost:4200",
             Self::Yt => "https://youtube.com",
             Self::Default => "https://google.com",
         }

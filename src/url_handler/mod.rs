@@ -24,9 +24,7 @@ pub fn open_browser_to_url(url: UrlInputType, bin_to_use: Option<&str>) -> Resul
         UrlInputType::Regular(raw_url_string) => {
             url_input::validate_and_fix_url_string(&raw_url_string)
         }
-        UrlInputType::Special(special_url) => {
-            url_input::validate_and_fix_url_string(&special_url.to_url_string())
-        }
+        UrlInputType::Special(special_url) => special_url.to_url_string(),
         UrlInputType::Blank => {
             ArgUtil::open_blank_page(bin_to_use)?;
             return Ok(());
