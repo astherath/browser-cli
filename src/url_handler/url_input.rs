@@ -8,7 +8,7 @@ pub enum UrlInputType {
 
 pub fn validate_and_fix_url_string(url_str: &str) -> String {
     // check for special yt shorthand first
-    if url_str.starts_with("yt +") {
+    if url_str.starts_with("yt+") {
         return turn_to_yt_search_url(url_str);
     }
     // check if searchable string
