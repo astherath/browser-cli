@@ -6,6 +6,7 @@ pub enum SpecialUrl {
     DevServer,
     Ng,
     Yt,
+    Lol,
     Default,
 }
 
@@ -17,6 +18,7 @@ impl SpecialUrl {
             Self::DevServer => "http://localhost:8000/docs",
             Self::Ng => "http://localhost:4200",
             Self::Yt => "https://youtube.com",
+            Self::Lol => "https://watch.lolesports.com",
             Self::Default => "about:blank",
         }
         .to_string()
@@ -41,6 +43,7 @@ impl SpecialUrl {
             "dev" => Self::DevServer,
             "ng" => Self::Ng,
             "yt" => Self::Yt,
+            "lol" => Self::Lol,
             "new" => Self::Default,
             _ => Self::Default,
         }
@@ -52,8 +55,8 @@ impl SpecialUrl {
             .map(|x| x.to_string())
             .collect()
     }
-    pub fn get_all_possible_value_strs_array() -> [&'static str; 6] {
-        ["github", "mail", "dev", "ng", "yt", "new"]
+    pub fn get_all_possible_value_strs_array() -> [&'static str; 7] {
+        ["github", "mail", "dev", "ng", "yt", "new", "lol"]
     }
 
     pub fn get_shorthand_url_pairs() -> Vec<(String, String)> {

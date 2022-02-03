@@ -15,7 +15,7 @@ pub fn get_matches_and_run_command() -> Result<()> {
                 .value_name("url")
                 .help("URL string, search term(s) or shortcut to open the browser instance to")
                 .long_help(
-                    "Can accept a URL string, a quoted sentence to google, or one of the shortcuts",
+                    "Can accept a URL string, a quoted sentence to google, a youtube query signified by \"yt +\", or one of the shortcuts",
                 )
                 .takes_value(true),
         )

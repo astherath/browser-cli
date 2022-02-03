@@ -7,6 +7,10 @@ pub enum UrlInputType {
 }
 
 pub fn validate_and_fix_url_string(url_str: &str) -> String {
+    // check for special yt shorthand first
+    if url_str.starts_with("yt +") {
+        return turn_to_yt_search_url(url_str);
+    }
     // check if searchable string
     if url_str.contains(" ") || !url_str.contains(".") {
         return turn_to_search_url(url_str);
@@ -30,6 +34,12 @@ pub fn turn_to_search_url(search_term: &str) -> String {
     let fmt_search_term = search_term.replace(" ", "+");
     format!("https://www.google.com/search?q={fmt_search_term}")
 }
+
+fn turn_to_yt_search_url(search_term: &str) -> String {
+    let fmt_search_term = search_term.chars().skip(4).collect::<String>().replace(" ", "+");
+    format!("https://www.youtube.com/results?search_query={fmt_search_term}")
+}
+
 
 fn add_http_prefix_to_url(url_str: &str) -> String {
     ["http://", url_str].join("")
