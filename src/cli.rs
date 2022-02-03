@@ -34,7 +34,7 @@ pub fn get_matches_and_run_command() -> Result<()> {
         )
         .get_matches();
 
-    if let Some(_) = matches.subcommand_matches("view") {
+    if matches.subcommand_matches("view").is_some() {
         let opts = SpecialUrl::get_shorthand_url_pairs();
         println!("Shorthand | url");
         println!("{}", "-".repeat(50));

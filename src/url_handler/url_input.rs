@@ -12,7 +12,7 @@ pub fn validate_and_fix_url_string(url_str: &str) -> String {
         return turn_to_yt_search_url(url_str);
     }
     // check if searchable string
-    if url_str.contains(" ") || !url_str.contains(".") {
+    if url_str.contains(' ') || !url_str.contains('.') {
         return turn_to_search_url(url_str);
     }
 
